@@ -15,7 +15,7 @@ DependencyDetection.defer do
       include NewRelic::Agent::MethodTracer
 
       def instrument_with_newrelic_trace(name, payload = {}, &blk)
-        payload ||= {:collection => "unknown"}
+        payload ||= (respond_to?(:instrument_payload) ? instrument_payload : {:collection => "unknown"})
         if payload[:database] == "admin"
           return instrument_without_newrelic_trace(name, payload, &blk)
         end
@@ -39,7 +39,7 @@ DependencyDetection.defer do
     end
     class Mongo::Collection; include Mongo::Logging; end
     class Mongo::Connection; include Mongo::Logging; end
-    class Mongo::Cursor; include Mongo::Logging; end
+    class Mongo::Cursor; include Mongo::Logging; public :instrument_payload; end
 
     ::Mongo::Cursor.class_eval do
       include NewRelic::Agent::MethodTracer
