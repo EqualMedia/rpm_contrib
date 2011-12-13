@@ -47,7 +47,6 @@ DependencyDetection.defer do
       end
       alias_method :refresh_without_newrelic_trace, :refresh
       alias_method :refresh, :refresh_with_newrelic_trace
-      add_method_tracer :close, 'Database/#{collection.name}/close'
     end
   end
 
