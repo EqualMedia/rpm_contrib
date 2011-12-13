@@ -15,6 +15,10 @@ DependencyDetection.defer do
       include NewRelic::Agent::MethodTracer
 
       def instrument_with_newrelic_trace(name, payload = {}, &blk)
+        if payload[:database] == "admin"
+          return instrument_without_newrelic_trace(name, payload, &blk)
+        end
+
         collection = payload[:collection]
         if collection == '$cmd'
           f = payload[:selector].first
