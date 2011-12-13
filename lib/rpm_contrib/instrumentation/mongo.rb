@@ -11,7 +11,7 @@ DependencyDetection.defer do
   end  
 
   executes do
-    ::Mongo::Connection.class_eval do
+    ::Mongo::Logging.class_eval do
       include NewRelic::Agent::MethodTracer
 
       def instrument_with_newrelic_trace(name, payload = {}, &blk)
